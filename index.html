@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C1530">
+<title>MyStyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Probador de bolsillo: tinta ciruela, fondo lila grisáceo, acento rosa probador */
+  --bg: #F3F1F7;
+  --surface: #FFFFFF;
+  --ink: #1C1530;
+  --muted: #6E6783;
+  --line: #E2DEEA;
+  --accent: #E2445C;
+  --accent-ink: #FFFFFF;
+  --ok: #1F9D6B;
+  --warn: #B7791F;
+  --font-display: "Syne", "Arial Black", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 18px;
+  /* Layout: una columna de 480px máx., barra de pestañas fija abajo */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14101F; --surface: #1F1930; --ink: #F2EEF9; --muted: #A69EBB; --line: #332B47;
+    --accent: #FF5A73; --accent-ink: #1C0710; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14101F; --surface: #1F1930; --ink: #F2EEF9; --muted: #A69EBB; --line: #332B47;
+  --accent: #FF5A73; --accent-ink: #1C0710; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, select { font: inherit; color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+
+.app { max-width: 480px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 96px); gap: 16px; }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -0.02em; margin: 0; }
+.brand span { color: var(--accent); }
+.pill { font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.pill.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, var(--line)); }
+.pill.demo { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
+
+h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h3 { font-size: 15px; margin: 0; }
+.sub { color: var(--muted); font-size: 14px; margin: 0; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.step { display: flex; align-items: center; gap: 10px; }
+.num { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-weight: 700; font-size: 13px; flex: none; }
+.num.done { background: var(--ok); color: #fff; }
+
+.row { display: flex; gap: 12px; align-items: center; }
+.thumb { width: 84px; height: 112px; border-radius: 12px; object-fit: cover; background: var(--bg); border: 1px solid var(--line); flex: none; }
+.thumb.empty { display: grid; place-items: center; color: var(--muted); font-size: 12px; text-align: center; padding: 6px; }
+
+.drop { border: 2px dashed var(--line); border-radius: 14px; padding: 18px; text-align: center; color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.drop:hover { border-color: var(--accent); }
+.drop img { max-height: 220px; border-radius: 10px; object-fit: contain; }
+
+.btn { appearance: none; border: 0; border-radius: 14px; padding: 14px 16px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); width: 100%; font-size: 17px; }
+.btn.primary:disabled { opacity: .45; cursor: not-allowed; }
+.btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+.btn.small { padding: 9px 12px; font-size: 14px; border-radius: 11px; }
+.btn.danger { color: var(--accent); border: 1px solid var(--accent); background: transparent; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--bg); border-radius: 99px; padding: 8px 12px; font-size: 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+label.field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500; }
+input[type="text"] { border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 11px 12px; width: 100%; }
+
+.progress { display: flex; flex-direction: column; gap: 8px; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 10%; background: var(--accent); border-radius: 99px; transition: width .6s ease; }
+
+.compare { position: relative; border-radius: 16px; overflow: hidden; background: var(--bg); aspect-ratio: 3 / 4; touch-action: none; user-select: none; }
+.compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.compare .after-wrap { position: absolute; inset: 0; overflow: hidden; }
+.compare .handle { position: absolute; top: 0; bottom: 0; width: 3px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.2); transform: translateX(-1.5px); }
+.compare .handle::after { content: "◀ ▶"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; color: #1C1530; font-size: 11px; padding: 6px 8px; border-radius: 99px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.tag { position: absolute; top: 10px; font-size: 12px; font-weight: 700; background: rgba(28,21,48,.75); color: #fff; padding: 4px 8px; border-radius: 8px; }
+.tag.l { left: 10px; } .tag.r { right: 10px; }
+
+.notice { font-size: 13px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--warn) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--line)); }
+.error { font-size: 14px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line)); }
+
+.tips { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: grid; gap: 4px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.grid button { padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); cursor: pointer; text-align: left; }
+.grid img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+.grid span { display: block; font-size: 11px; color: var(--muted); padding: 4px 6px; }
+
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.opt input { margin-top: 4px; accent-color: var(--accent); }
+.opt b { display: block; }
+.opt small { color: var(--muted); }
+
+nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 8px 8px calc(env(safe-area-inset-bottom) + 8px); display: flex; justify-content: center; z-index: 5; }
+nav.tabs .in { max-width: 480px; width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+nav.tabs button { border: 0; background: none; padding: 6px 2px; border-radius: 12px; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+nav.tabs button svg { width: 22px; height: 22px; }
+nav.tabs button[aria-current="page"] { color: var(--accent); }
+.hidden { display: none !important; }
+.soon { font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 6px; margin-left: 6px; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1 class="brand">My<span>Style</span></h1>
+    <span id="modePill" class="pill demo">Comprobando…</span>
+  </header>
+
+  <!-- PROBAR -->
+  <section id="view-try" class="view">
+    <div class="card">
+      <div class="step"><span class="num" id="n1">1</span><h3>Tu foto de cuerpo entero</h3></div>
+      <div class="row">
+        <div id="bodyThumbWrap"></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <p class="sub" id="bodyHint">Se guarda solo en este celular. La usas para todas tus pruebas.</p>
+          <button class="btn ghost small" id="goBody" type="button">Cambiar mi foto</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="step"><span class="num" id="n2">2</span><h3>La prenda que quieres probarte</h3></div>
+      <div class="drop" id="garmentDrop" role="button" tabindex="0" aria-label="Subir foto de la prenda">
+        <div id="garmentPreview">
+          <strong style="color:var(--ink)">Sube o toma una foto</strong><br>
+          <span style="font-size:14px">Captura de una tienda online, foto del maniquí o la prenda sobre la cama</span>
+        </div>
+      </div>
+      <input type="file" id="garmentInput" accept="image/*" class="hidden">
+      <div>
+        <p class="sub" style="margin-bottom:8px">¿Qué tipo de prenda es?</p>
+        <div class="chips" id="catChips" role="group" aria-label="Tipo de prenda">
+          <button class="chip" type="button" data-cat="top" aria-pressed="true">Polo / blusa / camisa</button>
+          <button class="chip" type="button" data-cat="bottom" aria-pressed="false">Pantalón / falda</button>
+          <button class="chip" type="button" data-cat="dress" aria-pressed="false">Vestido</button>
+          <button class="chip" type="button" data-cat="outer" aria-pressed="false">Casaca / abrigo</button>
+          <button class="chip" type="button" data-cat="full" aria-pressed="false">Conjunto completo</button>
+        </div>
+      </div>
+      <label class="field" for="note">Detalle opcional
+        <input type="text" id="note" maxlength="120" placeholder="Ej.: con la blusa por dentro del pantalón">
+      </label>
+    </div>
+
+    <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+      <button class="btn primary" id="tryBtn" type="button" disabled>Probármelo</button>
+      <p class="sub" id="tryHint" style="text-align:center">Primero agrega tu foto y la de la prenda.</p>
+    </div>
+
+    <div class="card hidden" id="progressCard" style="margin-top:12px" aria-live="polite">
+      <div class="progress">
+        <strong id="progressText">Preparando las fotos…</strong>
+        <div class="bar"><i id="progressBar"></i></div>
+        <span class="sub">Suele tardar entre 10 y 40 segundos.</span>
+      </div>
+    </div>
+    <div class="error hidden" id="tryError" role="alert" style="margin-top:12px"></div>
+
+    <div class="card hidden" id="resultCard" style="margin-top:12px">
+      <div class="step"><span class="num done">✓</span><h3>Así te queda</h3></div>
+      <div class="compare" id="compare" aria-label="Comparación antes y después. Desliza para comparar.">
+        <img id="cmpBefore" alt="Tu foto original">
+        <div class="after-wrap" id="afterWrap"><img id="cmpAfter" alt="Tú con la prenda puesta"></div>
+        <div class="handle" id="cmpHandle"></div>
+        <span class="tag l">Con la prenda</span><span class="tag r">Antes</span>
+      </div>
+      <p class="notice hidden" id="demoNotice">Modo demo: esto es una simulación para ver el flujo. La IA real se activa cuando la app está publicada en Netlify con tu clave.</p>
+      <div class="row" style="flex-wrap:wrap">
+        <a class="btn ghost small" id="dlBtn" download="mystyle.jpg">Guardar imagen</a>
+        <button class="btn ghost small" id="againBtn" type="button">Probar otra prenda</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MI CUERPO -->
+  <section id="view-body" class="view hidden">
+    <div class="card">
+      <h2>Tu foto base</h2>
+      <p class="sub">La IA viste esta foto con cada prenda. Mientras mejor sea, más real será el resultado.</p>
+      <div class="drop" id="bodyDrop" role="button" tabindex="0" aria-label="Subir foto de cuerpo entero">
+        <div id="bodyPreview"><strong style="color:var(--ink)">Tomar o subir foto</strong><br><span style="font-size:14px">De cuerpo entero, de pies a cabeza</span></div>
+      </div>
+      <input type="file" id="bodyInput" accept="image/*" class="hidden">
+      <h3>Para que salga bien</h3>
+      <ul class="tips">
+        <li>De pie y de frente, brazos un poco separados del cuerpo.</li>
+        <li>Que se vea todo el cuerpo, de la cabeza a los zapatos.</li>
+        <li>Buena luz, fondo simple, sin otras personas.</li>
+        <li>Ropa ajustada o sencilla: así la IA entiende tu silueta.</li>
+        <li>Pide que te la tomen o usa el temporizador del celular a la altura del pecho.</li>
+      </ul>
+      <p class="sub">Privacidad: tu foto se guarda solo en este dispositivo. Para cada prueba se envía cifrada al servicio de IA y no la guardamos en ningún servidor.</p>
+    </div>
+  </section>
+
+  <!-- HISTORIAL -->
+  <section id="view-history" class="view hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h2>Mis pruebas</h2><span class="sub" id="histCount"></span></div>
+      <div class="grid" id="histGrid"></div>
+      <p class="sub" id="histEmpty">Aquí aparecerá cada prenda que te pruebes, para comparar antes de comprar.</p>
+    </div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section id="view-settings" class="view hidden">
+    <div class="card">
+      <h2>Ajustes</h2>
+      <h3>Calidad de la prueba</h3>
+      <label class="opt" for="q-fast"><input type="radio" name="quality" id="q-fast" value="fast" checked>
+        <span><b>Rápida</b><small>1 crédito de FASHN por prueba (≈ 10–20 s).</small></span></label>
+      <label class="opt" for="q-bal"><input type="radio" name="quality" id="q-bal" value="balanced">
+        <span><b>Equilibrada</b><small>2 créditos por prueba, más detalle en telas y estampados.</small></span></label>
+      <h3>Próximamente</h3>
+      <p class="sub">Maquillaje: base, rubor, gloss, labial, pestañas y color de cabello sobre tu selfie.<span class="soon">v2</span></p>
+      <h3>Mis datos</h3>
+      <button class="btn danger small" id="wipeBtn" type="button">Borrar mi foto y todo el historial</button>
+      <p class="sub hidden" id="wipeConfirm">Toca otra vez para confirmar. No se puede deshacer.</p>
+      <p class="sub" id="serverInfo"></p>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="in">
+    <button type="button" data-view="try" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3 4 6l2 5 2-1v11h8V10l2 1 2-5-5-3a3 3 0 0 1-6 0Z"/></svg>Probar</button>
+    <button type="button" data-view="body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><path d="M12 8v7m0 0-3 6m3-6 3 6M6 11h12"/></svg>Mi cuerpo</button>
+    <button type="button" data-view="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/></svg>Mis pruebas</button>
+    <button type="button" data-view="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>Ajustes</button>
+  </div>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const CAT_LABEL = { top: "Polo / blusa", bottom: "Pantalón / falda", dress: "Vestido", outer: "Casaca", full: "Conjunto" };
+
+  // ---------- almacenamiento local (IndexedDB con respaldo en memoria) ----------
+  const mem = new Map();
+  let dbp = null;
+  function db() {
+    if (dbp) return dbp;
+    dbp = new Promise((res) => {
+      try {
+        const r = indexedDB.open("mystyle", 1);
+        r.onupgradeneeded = () => r.result.createObjectStore("kv");
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => res(null);
+      } catch { res(null); }
+    });
+    return dbp;
+  }
+  async function get(k) {
+    const d = await db(); if (!d) return mem.get(k);
+    return new Promise((res) => { try { const q = d.transaction("kv").objectStore("kv").get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(mem.get(k)); } catch { res(mem.get(k)); } });
+  }
+  async function set(k, v) {
+    mem.set(k, v); const d = await db(); if (!d) return;
+    return new Promise((res) => { try { const t = d.transaction("kv", "readwrite"); t.objectStore("kv").put(v, k); t.oncomplete = res; t.onerror = res; } catch { res(); } });
+  }
+  async function del(k) {
+    mem.delete(k); const d = await db(); if (!d) return;
+    return new Promise((res) => { try { const t = d.transaction("kv", "readwrite"); t.objectStore("kv").delete(k); t.oncomplete = res; t.onerror = res; } catch { res(); } });
+  }
+
+  // ---------- estado ----------
+  const state = { body: null, garment: null, cat: "top", quality: "fast", history: [], live: false, keyOk: false, busy: false };
+
+  // ---------- utilidades de imagen ----------
+  function fileToDataURL(file, maxSide = 1280, quality = 0.88) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const s = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+        const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
+        x.drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("No pude leer esa imagen. Prueba con una foto JPG o PNG.")); };
+      img.src = url;
+    });
+  }
+  const loadImg = (src) => new Promise((r, j) => { const i = new Image(); i.onload = () => r(i); i.onerror = j; i.src = src; });
+
+  // Simulación honesta para el modo demo: superpone la prenda en la zona del torso/piernas.
+  async function demoComposite(bodySrc, garmentSrc, cat) {
+    const [b, g] = await Promise.all([loadImg(bodySrc), loadImg(garmentSrc)]);
+    const c = document.createElement("canvas"); c.width = b.naturalWidth; c.height = b.naturalHeight;
+    const x = c.getContext("2d"); x.drawImage(b, 0, 0);
+    // Sin IA no se puede vestir la foto: en vez de pegar la prenda encima, mostramos una tarjeta clara.
+    x.fillStyle = "rgba(28,21,48,.62)"; x.fillRect(0, 0, c.width, c.height);
+    const cw = Math.min(c.width * 0.8, 520), ch = cw * 1.15;
+    const cx = (c.width - cw) / 2, cy = (c.height - ch) / 2;
+    x.fillStyle = "#fff"; x.beginPath(); x.roundRect ? x.roundRect(cx, cy, cw, ch, 24) : x.rect(cx, cy, cw, ch); x.fill();
+    const gs = Math.min((cw * 0.6) / g.naturalWidth, (ch * 0.5) / g.naturalHeight);
+    const gw = g.naturalWidth * gs, gh = g.naturalHeight * gs;
+    x.drawImage(g, cx + (cw - gw) / 2, cy + ch * 0.07, gw, gh);
+    const fs = Math.round(cw / 15);
+    x.fillStyle = "#1C1530"; x.textAlign = "center";
+    x.font = `bold ${fs}px system-ui, sans-serif`;
+    x.fillText("Aquí verás esta prenda", c.width / 2, cy + ch * 0.68);
+    x.fillText("puesta en tu foto", c.width / 2, cy + ch * 0.68 + fs * 1.25);
+    x.font = `${Math.round(fs * 0.7)}px system-ui, sans-serif`; x.fillStyle = "#6E6783";
+    x.fillText("Modo demo · la IA se activa", c.width / 2, cy + ch * 0.88);
+    x.fillText("al publicar la app en Netlify", c.width / 2, cy + ch * 0.88 + fs * 0.95);
+    return c.toDataURL("image/jpeg", 0.85);
+  }
+
+  // ---------- render ----------
+  function renderBody() {
+    const wrap = $("bodyThumbWrap");
+    wrap.innerHTML = state.body
+      ? `<img class="thumb" src="${state.body}" alt="Tu foto de cuerpo entero">`
+      : `<div class="thumb empty">Aún no tienes foto</div>`;
+    $("goBody").textContent = state.body ? "Cambiar mi foto" : "Agregar mi foto";
+    $("n1").classList.toggle("done", !!state.body); $("n1").textContent = state.body ? "✓" : "1";
+    $("bodyPreview").innerHTML = state.body
+      ? `<img src="${state.body}" alt="Tu foto base actual"><span style="font-size:14px">Toca para cambiarla</span>`
+      : `<strong style="color:var(--ink)">Tomar o subir foto</strong><br><span style="font-size:14px">De cuerpo entero, de pies a cabeza</span>`;
+    renderTryBtn();
+  }
+  function renderGarment() {
+    $("garmentPreview").innerHTML = state.garment
+      ? `<img src="${state.garment}" alt="Prenda seleccionada"><span style="font-size:14px">Toca para cambiarla</span>`
+      : `<strong style="color:var(--ink)">Sube o toma una foto</strong><br><span style="font-size:14px">Captura de una tienda online, foto del maniquí o la prenda sobre la cama</span>`;
+    $("n2").classList.toggle("done", !!state.garment); $("n2").textContent = state.garment ? "✓" : "2";
+    renderTryBtn();
+  }
+  function renderTryBtn() {
+    const ready = state.body && state.garment && !state.busy;
+    $("tryBtn").disabled = !ready;
+    $("tryHint").textContent = state.busy ? "Probándote la prenda…"
+      : !state.body ? "Primero agrega tu foto de cuerpo entero."
+      : !state.garment ? "Ahora sube la foto de la prenda."
+      : state.live && !state.keyOk ? "Falta configurar la clave de FASHN en Netlify."
+      : state.live ? `Usará ${state.quality === "balanced" ? 2 : 1} crédito(s) de FASHN.`
+      : "Modo demo: verás una simulación del flujo.";
+  }
+  function renderHistory() {
+    const g = $("histGrid"); g.innerHTML = "";
+    state.history.slice().reverse().forEach((h) => {
+      const b = document.createElement("button"); b.type = "button";
+      const d = new Date(h.at);
+      b.innerHTML = `<img src="${h.result}" alt="Prueba de ${CAT_LABEL[h.cat] || "prenda"}"><span>${CAT_LABEL[h.cat] || ""} · ${d.toLocaleDateString("es-PE", { day: "2-digit", month: "short" })}${h.demo ? " · demo" : ""}</span>`;
+      b.addEventListener("click", () => { showResult(h); go("try"); });
+      g.appendChild(b);
+    });
+    $("histEmpty").classList.toggle("hidden", state.history.length > 0);
+    $("histCount").textContent = state.history.length ? `${state.history.length} prueba(s)` : "";
+  }
+  function renderMode() {
+    const p = $("modePill");
+    if (state.live && state.keyOk) { p.className = "pill ok"; p.textContent = "IA conectada"; }
+    else if (state.live) { p.className = "pill demo"; p.textContent = "Falta clave"; }
+    else { p.className = "pill demo"; p.textContent = "Modo demo"; }
+    $("serverInfo").textContent = state.live
+      ? (state.keyOk ? "Servidor conectado. Las pruebas usan la IA de FASHN (Try-On Max)." : "Servidor conectado, pero falta la variable FASHN_API_KEY en Netlify.")
+      : "Sin servidor: estás viendo la app en modo demo. Publícala en Netlify para usar la IA real.";
+    renderTryBtn();
+  }
+
+  // ---------- navegación ----------
+  const VIEWS = ["try", "body", "history", "settings"];
+  function go(v) {
+    if (!VIEWS.includes(v)) v = "try";
+    VIEWS.forEach((n) => $("view-" + n).classList.toggle("hidden", n !== v));
+    document.querySelectorAll("nav.tabs button").forEach((b) => { if (b.dataset.view === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+    try { history.replaceState(null, "", v === "try" ? location.pathname : "#" + v); } catch {}
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll("nav.tabs button").forEach((b) => b.addEventListener("click", () => go(b.dataset.view)));
+  $("goBody").addEventListener("click", () => go("body"));
+
+  // ---------- entradas ----------
+  function bindDrop(dropId, inputId, onFile) {
+    const drop = $(dropId), input = $(inputId);
+    const open = () => input.click();
+    drop.addEventListener("click", open);
+    drop.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+    drop.addEventListener("dragover", (e) => e.preventDefault());
+    drop.addEventListener("drop", (e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) onFile(f); });
+    input.addEventListener("change", () => { const f = input.files[0]; if (f) onFile(f); input.value = ""; });
+  }
+  bindDrop("bodyDrop", "bodyInput", async (f) => {
+    try { state.body = await fileToDataURL(f, 1280); await set("body", state.body); renderBody(); go("try"); }
+    catch (e) { alertIn("tryError", e.message); }
+  });
+  bindDrop("garmentDrop", "garmentInput", async (f) => {
+    try { state.garment = await fileToDataURL(f, 1024); renderGarment(); hide("tryError"); }
+    catch (e) { alertIn("tryError", e.message); }
+  });
+  $("catChips").addEventListener("click", (e) => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    state.cat = c.dataset.cat;
+    document.querySelectorAll("#catChips .chip").forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+  });
+  document.querySelectorAll('input[name="quality"]').forEach((r) => r.addEventListener("change", async () => {
+    state.quality = r.value; await set("quality", r.value); renderTryBtn();
+  }));
+
+  const hide = (id) => $(id).classList.add("hidden");
+  const show = (id) => $(id).classList.remove("hidden");
+  function alertIn(id, msg) { $(id).textContent = msg; show(id); }
+
+  // ---------- prueba virtual ----------
+  function setProgress(text, pct) { $("progressText").textContent = text; $("progressBar").style.width = pct + "%"; }
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  async function runLive() {
+    setProgress("Enviando tus fotos a la IA…", 12);
+    const r = await fetch("/api/tryon", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ model_image: state.body, product_image: state.garment, category: state.cat, note: $("note").value, mode: state.quality }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.id) throw new Error(j.error || "No se pudo iniciar la prueba. Intenta de nuevo.");
+    const labels = { starting: ["Preparando…", 25], in_queue: ["En cola…", 35], processing: ["Vistiéndote con la prenda…", 70] };
+    const t0 = Date.now();
+    while (Date.now() - t0 < 120000) {
+      await sleep(2500);
+      const s = await fetch(`/api/status?id=${encodeURIComponent(j.id)}`).then((x) => x.json()).catch(() => ({}));
+      if (s.status === "completed" && s.image) return s.image;
+      if (s.status === "failed") throw new Error("La IA no pudo con esta combinación: " + (s.error || "intenta con otra foto.") );
+      const [txt, pct] = labels[s.status] || ["Procesando…", 50];
+      setProgress(txt, Math.min(92, pct + (Date.now() - t0) / 2000));
+    }
+    throw new Error("Tardó demasiado. Revisa tu conexión e intenta otra vez.");
+  }
+
+  async function runDemo() {
+    setProgress("Simulando la prueba (modo demo)…", 30); await sleep(700);
+    setProgress("Vistiéndote con la prenda…", 75); await sleep(900);
+    return demoComposite(state.body, state.garment, state.cat);
+  }
+
+  $("tryBtn").addEventListener("click", async () => {
+    if (state.busy) return;
+    state.busy = true; renderTryBtn(); hide("tryError"); hide("resultCard"); show("progressCard");
+    const isDemo = !(state.live && state.keyOk);
+    try {
+      const result = isDemo ? await runDemo() : await runLive();
+      setProgress("¡Listo!", 100);
+      const entry = { at: Date.now(), cat: state.cat, before: state.body, result, demo: isDemo };
+      state.history.push(entry); if (state.history.length > 30) state.history.shift();
+      await set("history", state.history); renderHistory();
+      showResult(entry);
+    } catch (e) {
+      alertIn("tryError", e.message || "Algo salió mal. Intenta de nuevo.");
+    } finally {
+      state.busy = false; renderTryBtn(); hide("progressCard");
+    }
+  });
+
+  function showResult(entry) {
+    $("cmpBefore").src = entry.before; $("cmpAfter").src = entry.result;
+    $("dlBtn").href = entry.result;
+    $("demoNotice").classList.toggle("hidden", !entry.demo);
+    show("resultCard"); setSplit(entry.demo ? 100 : 55);
+    $("resultCard").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+  $("againBtn").addEventListener("click", () => {
+    state.garment = null; $("note").value = ""; renderGarment(); hide("resultCard"); window.scrollTo(0, 0);
+  });
+
+  // deslizador antes/después
+  function setSplit(pct) {
+    pct = Math.max(0, Math.min(100, pct));
+    $("afterWrap").style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+    $("cmpHandle").style.left = pct + "%";
+  }
+  (() => {
+    const el = $("compare"); let drag = false;
+    const at = (e) => { const r = el.getBoundingClientRect(); setSplit(((e.clientX - r.left) / r.width) * 100); };
+    el.addEventListener("pointerdown", (e) => { drag = true; el.setPointerCapture(e.pointerId); at(e); });
+    el.addEventListener("pointermove", (e) => drag && at(e));
+    el.addEventListener("pointerup", () => (drag = false));
+    el.tabIndex = 0;
+    el.addEventListener("keydown", (e) => {
+      const cur = parseFloat($("cmpHandle").style.left) || 50;
+      if (e.key === "ArrowLeft") setSplit(cur - 5); if (e.key === "ArrowRight") setSplit(cur + 5);
+    });
+  })();
+
+  // borrar datos (doble toque en lugar de confirm(), que los navegadores pueden bloquear)
+  let wipeArmed = false;
+  $("wipeBtn").addEventListener("click", async () => {
+    if (!wipeArmed) { wipeArmed = true; show("wipeConfirm"); setTimeout(() => { wipeArmed = false; hide("wipeConfirm"); }, 4000); return; }
+    await del("body"); await del("history");
+    state.body = null; state.garment = null; state.history = [];
+    wipeArmed = false; hide("wipeConfirm"); hide("resultCard");
+    renderBody(); renderGarment(); renderHistory();
+  });
+
+  // ---------- arranque ----------
+  (async () => {
+    state.body = (await get("body")) || null;
+    state.history = (await get("history")) || [];
+    state.quality = (await get("quality")) || "fast";
+    const q = document.querySelector(`input[name="quality"][value="${state.quality}"]`); if (q) q.checked = true;
+    renderBody(); renderGarment(); renderHistory();
+    go((location.hash || "").slice(1));
+    try {
+      const ctl = new AbortController(); setTimeout(() => ctl.abort(), 4000);
+      const h = await fetch("/api/health", { signal: ctl.signal, cache: "no-store" });
+      const j = await h.json();
+      state.live = !!j.ok; state.keyOk = !!j.keyConfigured;
+    } catch { state.live = false; state.keyOk = false; }
+    renderMode();
+  })();
+})();
+</script>
+</body>
+</html>
